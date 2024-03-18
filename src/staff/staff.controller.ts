@@ -1,25 +1,12 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateStaffDto, UpdateStaffDto } from './dto/staff.dto';
+import { UpdateStaffDto } from './dto/staff.dto';
 import { Staff } from './entities/staff.entity';
 import { StaffService } from './staff.service';
 @ApiTags(Staff.name)
 @Controller('staff')
 export class StaffController {
   constructor(private readonly staffService: StaffService) {}
-
-  @Post()
-  create(@Body() createStaffDto: CreateStaffDto) {
-    return this.staffService.create(createStaffDto);
-  }
 
   @Get()
   findAll() {

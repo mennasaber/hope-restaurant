@@ -1,15 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateStaffDto, UpdateStaffDto } from './dto/staff.dto';
 import { Staff, StaffDocument } from './entities/staff.entity';
-
 @Injectable()
 export class StaffService {
   constructor(
     @InjectModel(Staff.name) private staffModel: Model<StaffDocument>,
   ) {}
-  create(createStaffDto: CreateStaffDto) {
+  async create(createStaffDto: CreateStaffDto) {
+    const existOne = await this.staffModel.findOne({
+      email: createStaffDto.email,
+      removed: false,
+    });
+    if (existOne) {
+      throw new BadRequestException();
+    }
     return this.staffModel.create(createStaffDto);
   }
 
@@ -21,8 +27,8 @@ export class StaffService {
     return this.staffModel.findById(id);
   }
 
-  update(id: string, updateStaffDto: UpdateStaffDto) {
-    return this.staffModel.findByIdAndUpdate(id, updateStaffDto, { new: true });
+  async update(id: string, updateStaffDto: UpdateStaffDto) {
+    return this.staffModel.findByIdAndUpdate(id, updateStaffDto);
   }
 
   remove(id: string) {
@@ -31,5 +37,9 @@ export class StaffService {
       { removed: true },
       { new: true },
     );
+  }
+
+  findOneByQuery(query: any) {
+    return this.staffModel.findOne(query);
   }
 }
