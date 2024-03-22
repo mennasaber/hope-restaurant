@@ -1,10 +1,21 @@
-import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UpdateStaffDto } from './dto/staff.dto';
 import { Staff } from './entities/staff.entity';
 import { StaffService } from './staff.service';
 @ApiTags(Staff.name)
 @Controller('staff')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 export class StaffController {
   constructor(private readonly staffService: StaffService) {}
 

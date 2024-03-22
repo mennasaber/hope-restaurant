@@ -29,4 +29,8 @@ export class AuthService {
       token: await this.jwtService.signAsync({ _id: staff._id }),
     };
   }
+
+  validate(id: string) {
+    return this.staffService.findOneByQuery({ _id: id, removed: false });
+  }
 }
