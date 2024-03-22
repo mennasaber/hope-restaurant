@@ -11,12 +11,13 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RoleGuard } from 'src/auth/guards/role.guard';
 import { UpdateStaffDto } from './dto/staff.dto';
 import { Staff } from './entities/staff.entity';
 import { StaffService } from './staff.service';
 @ApiTags(Staff.name)
 @Controller('staff')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RoleGuard)
 @ApiBearerAuth()
 export class StaffController {
   constructor(private readonly staffService: StaffService) {}

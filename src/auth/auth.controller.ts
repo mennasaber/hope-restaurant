@@ -5,6 +5,7 @@ import { Roles } from './decorators/roles.decorator';
 import { SignInDto, SignUpDto } from './dto/auth.dto';
 import { Role } from './enums/role.enum';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RoleGuard } from './guards/role.guard';
 @ApiTags('Auth')
 @ApiBearerAuth()
 @Controller('auth')
@@ -12,7 +13,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @Post('sign-up')
   @Roles(Role.SuperAdmin)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   create(@Body() createStaffDto: SignUpDto) {
     return this.authService.signUp(createStaffDto);
   }
