@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Document } from 'mongoose';
+import { Role } from 'src/auth/enums/role.enum';
 export type StaffDocument = Staff & Document;
 @Schema({ timestamps: true, autoIndex: true })
 export class Staff {
@@ -12,6 +13,8 @@ export class Staff {
   phoneNumber: string;
   @Prop({ type: String, required: true })
   email: string;
+  @Prop({ type: String, enum: Role, default: Role.Staff })
+  role: string;
   @Prop({ type: String, required: true })
   pin: string;
   @Prop({ type: Boolean, default: false })

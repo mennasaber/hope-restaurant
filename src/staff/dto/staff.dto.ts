@@ -1,5 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsEmail, IsString, Length } from 'class-validator';
+import { IsEmail, IsEnum, IsString, Length } from 'class-validator';
+import { Role } from 'src/auth/enums/role.enum';
 
 export class CreateStaffDto {
   @IsString()
@@ -15,6 +16,9 @@ export class CreateStaffDto {
   @IsEmail()
   @ApiProperty({ type: String, required: true })
   email: string;
+  @IsEnum(Role)
+  @ApiProperty({ type: String, enum: Role })
+  role: string;
   @IsString()
   @Length(4, 4)
   @ApiProperty({ type: String, required: true })
