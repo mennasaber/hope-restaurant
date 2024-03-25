@@ -2,7 +2,12 @@ import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { Roles } from './decorators/roles.decorator';
-import { SignInDto, SignUpDto } from './dto/auth.dto';
+import {
+  SignInDto,
+  SignInUserDto,
+  SignUpDto,
+  SignUpUserDto,
+} from './dto/auth.dto';
 import { Role } from './enums/role.enum';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RoleGuard } from './guards/role.guard';
@@ -11,6 +16,16 @@ import { RoleGuard } from './guards/role.guard';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+  @Post('user/sign-up')
+  createUser(@Body() createUserDto: SignUpUserDto) {
+    return this.authService.signUpUser(createUserDto);
+  }
+
+  @Post('user/sign-in')
+  signInUser(@Body() dto: SignInUserDto) {
+    return this.authService.signInUser(dto);
+  }
+
   @Post('sign-up')
   @Roles(Role.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)

@@ -4,9 +4,9 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthService } from '../auth.service';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(
+export class UserJwtStrategy extends PassportStrategy(
   Strategy,
-  'StaffJwtStrategy',
+  'UserJwtStrategy',
 ) {
   constructor(private authService: AuthService) {
     super({
@@ -15,6 +15,6 @@ export class JwtStrategy extends PassportStrategy(
     });
   }
   validate(payload: any) {
-    return this.authService.validate(payload._id);
+    return this.authService.validateUser(payload._id);
   }
 }

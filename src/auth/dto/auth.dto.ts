@@ -27,3 +27,20 @@ export class SignUpDto extends SignInDto {
   @ApiProperty({ type: String, enum: Role })
   role: string;
 }
+
+export class SignInUserDto {
+  @IsEmail()
+  @ApiProperty({ type: String, required: true })
+  email: string;
+  @IsString()
+  @ApiProperty({ type: String, required: true })
+  password: string;
+}
+export class SignUpUserDto extends SignInUserDto {
+  @IsString()
+  @ApiProperty({ type: String, required: true })
+  name: string;
+  @IsString()
+  @ApiProperty({ type: String, required: true })
+  phoneNumber: string;
+}
