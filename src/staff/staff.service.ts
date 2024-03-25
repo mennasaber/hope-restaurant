@@ -10,13 +10,16 @@ export class StaffService {
   ) {}
   async create(createStaffDto: CreateStaffDto) {
     const existOne = await this.staffModel.findOne({
-      email: createStaffDto.email,
+      email: createStaffDto.email.trim().toLowerCase(),
       removed: false,
     });
     if (existOne) {
       throw new BadRequestException();
     }
-    return this.staffModel.create(createStaffDto);
+    return this.staffModel.create({
+      ...createStaffDto,
+      email: createStaffDto.email.trim().toLowerCase(),
+    });
   }
 
   findAll() {
@@ -26,7 +29,7 @@ export class StaffService {
   findOne(id: string) {
     return this.staffModel.findById(id);
   }
-
+  //BUG: email validation
   async update(id: string, updateStaffDto: UpdateStaffDto) {
     return this.staffModel.findByIdAndUpdate(id, updateStaffDto);
   }

@@ -27,6 +27,7 @@ export class UserService {
     return this.userModel.findById(id);
   }
 
+  //BUG: email validation
   update(user: UserDocument, updateUserDto: UpdateUserDto) {
     return this.userModel.findOneAndUpdate({ _id: user._id }, updateUserDto);
   }
