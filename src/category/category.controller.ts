@@ -17,28 +17,36 @@ import { CategoryService } from './category.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
 @ApiBearerAuth()
 @ApiTags('Category')
-@UseGuards(JwtAuthGuard, RoleGuard)
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(Role.SuperAdmin, Role.Admin)
   create(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoryService.create(createCategoryDto);
   }
 
+  @Get('/menu')
+  getMenu() {
+    return this.categoryService.getMenu();
+  }
+
   @Get()
+  @UseGuards(JwtAuthGuard, RoleGuard)
   findAll() {
     return this.categoryService.findAll();
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard, RoleGuard)
   findOne(@Param('id') id: string) {
     return this.categoryService.findOne(id);
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(Role.SuperAdmin, Role.Admin)
   update(
     @Param('id') id: string,
@@ -48,6 +56,7 @@ export class CategoryController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(Role.SuperAdmin, Role.Admin)
   remove(@Param('id') id: string) {
     return this.categoryService.remove(id);
