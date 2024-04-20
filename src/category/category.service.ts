@@ -1,5 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { Cache } from 'cache-manager';
 import { Model } from 'mongoose';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
 import { Category, CategoryDocument } from './entities/category.entity';
@@ -8,6 +10,7 @@ import { Category, CategoryDocument } from './entities/category.entity';
 export class CategoryService {
   constructor(
     @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>,
+    @Inject(CACHE_MANAGER) private cacheService: Cache,
   ) {}
   async create(createCategoryDto: CreateCategoryDto) {
     const existCategory = await this.categoryModel.findOne({
@@ -37,7 +40,9 @@ export class CategoryService {
   }
 
   async getMenu() {
-    return this.categoryModel.aggregate([
+    let menu = await this.cacheService.get('menu');
+    if (menu) return menu;
+    menu = await this.categoryModel.aggregate([
       {
         $match: {
           removed: false,
@@ -75,5 +80,7 @@ export class CategoryService {
         },
       },
     ]);
+    await this.cacheService.set('menu', menu, 3.6e6);
+    return menu;
   }
 }
